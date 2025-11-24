@@ -1,0 +1,87 @@
+# Docker Compose with PostgreSQL Database
+# Use this for production with persistent database
+
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: mutant-detector-db
+    environment:
+      - POSTGRES_DB=mutantdb
+      - POSTGRES_USER=mutant_user
+      - POSTGRES_PASSWORD=mutant_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mutant_user -d mutantdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - mutant-network
+
+  # Mutant Detector API Service
+  mutant-detector-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mutant-detector-api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      # Spring Profile
+      - SPRING_PROFILES_ACTIVE=prod
+      
+      # PostgreSQL Database Configuration
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/mutantdb
+      - SPRING_DATASOURCE_USERNAME=mutant_user
+      - SPRING_DATASOURCE_PASSWORD=mutant_password
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
+      
+      # JPA Configuration
+      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.PostgreSQLDialect
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_SHOW_SQL=false
+      - SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL=true
+      
+      # Connection Pool
+      - SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE=10
+      - SPRING_DATASOURCE_HIKARI_MINIMUM_IDLE=5
+      
+      # Logging
+      - LOGGING_LEVEL_ROOT=INFO
+      - LOGGING_LEVEL_COM_MUTANT_DETECTOR=DEBUG
+      
+      # Server Configuration
+      - SERVER_PORT=8080
+      
+      # JVM Memory Settings
+      - JAVA_OPTS=-Xmx512m -Xms256m
+    
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    
+    restart: unless-stopped
+    
+    networks:
+      - mutant-network
+
+volumes:
+  postgres-data:
+    driver: local
+
+networks:
+  mutant-network:
+    driver: bridge
