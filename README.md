@@ -23,6 +23,7 @@
 - [Características](#características)
 - [Tecnologías](#tecnologías)
 - [Instalación y Ejecución](#instalación-y-ejecución)
+- [Deployment en Producción](#deployment-en-producción)
 - [API Endpoints](#api-endpoints)
   - [POST /mutant - Detectar Mutante](#post-mutant---detectar-mutante)
   - [GET /stats - Obtener Estadísticas](#get-stats---obtener-estadísticas)
@@ -79,7 +80,8 @@ En este caso se detectan **dos secuencias**:
 - **Manejo centralizado de errores** con respuestas estructuradas
 - **81 tests** con 100% de éxito y cobertura superior al 80%
 - **Dockerizado** con multi-stage build optimizado
-- **Base de datos H2** en memoria (fácilmente migrable a PostgreSQL)
+- **Base de datos H2** en desarrollo y **PostgreSQL** en producción
+- **Desplegado en Render** con alta disponibilidad
 
 ---
 
@@ -92,12 +94,14 @@ En este caso se detectan **dos secuencias**:
 | **Spring Data JPA** | - | Persistencia de datos |
 | **Spring Validation** | - | Validación de entrada |
 | **Gradle** | 8.5 | Gestión de dependencias |
-| **H2 Database** | - | Base de datos en memoria |
+| **H2 Database** | - | Base de datos en memoria (desarrollo) |
+| **PostgreSQL** | 16 | Base de datos en producción |
 | **Lombok** | - | Reducción de boilerplate |
 | **SpringDoc OpenAPI** | - | Documentación Swagger |
 | **JUnit 5** | - | Framework de testing |
 | **Mockito** | - | Mocking para tests |
 | **Docker** | - | Containerización |
+| **Render** | - | Plataforma de deployment |
 
 ---
 
@@ -153,6 +157,85 @@ gradlew.bat bootRun
 ```
 
 La aplicación estará disponible en: **http://localhost:8080**
+
+---
+
+## Deployment en Producción
+
+La API está desplegada y disponible en **Render** con PostgreSQL como base de datos.
+
+### URL de Producción
+
+```
+https://mutant-detector-api-dz6e.onrender.com
+```
+
+### Endpoints en Producción
+
+**Detectar Mutante:**
+```bash
+POST https://mutant-detector-api-dz6e.onrender.com/mutant
+```
+
+**Obtener Estadísticas:**
+```bash
+GET https://mutant-detector-api-dz6e.onrender.com/stats
+```
+
+**Documentación Swagger:**
+```
+https://mutant-detector-api-dz6e.onrender.com/swagger-ui.html
+```
+
+**Health Check:**
+```
+https://mutant-detector-api-dz6e.onrender.com/actuator/health
+```
+
+### Ejemplo de Uso en Producción
+
+```bash
+curl -X POST https://mutant-detector-api-dz6e.onrender.com/mutant \
+  -H "Content-Type: application/json" \
+  -d '{
+    "dna": [
+      "ATGCGA",
+      "CAGTGC",
+      "TTATGT",
+      "AGAAGG",
+      "CCCCTA",
+      "TCACTG"
+    ]
+  }'
+```
+
+### Características del Deployment
+
+- **Plataforma:** Render
+- **Base de Datos:** PostgreSQL 16
+- **Región:** Oregon (US West)
+- **Escalabilidad:** Automática
+- **SSL/TLS:** Habilitado
+- **Health Checks:** Configurados
+- **Logs:** Centralizados en Render Dashboard
+
+### Desplegar tu Propia Instancia
+
+Si deseas desplegar tu propia instancia en Render:
+
+1. Haz fork del repositorio
+2. Crea una cuenta en [Render](https://render.com)
+3. Crea un nuevo PostgreSQL Database
+4. Crea un nuevo Web Service conectado a tu repositorio
+5. Configura las variables de entorno:
+   - `DB_HOST`: hostname de tu base de datos PostgreSQL
+   - `DB_NAME`: nombre de la base de datos
+   - `DB_USER`: usuario de PostgreSQL
+   - `DB_PASSWORD`: contraseña de PostgreSQL
+   - `SPRING_PROFILES_ACTIVE`: `prod`
+6. Render desplegará automáticamente desde tu rama `main`
+
+Para más detalles, consulta la [Guía de Deployment en Render](RENDER_DEPLOYMENT.md).
 
 ---
 
@@ -694,14 +777,16 @@ Uso de queries nativas y métodos de conteo optimizados en el repositorio para e
 
 ## Próximos Pasos
 
-- [ ] Migrar a base de datos PostgreSQL para producción
+- [x] Migrar a base de datos PostgreSQL para producción
+- [x] Agregar Spring Boot Actuator para monitoreo
+- [x] Desplegar en la nube (Render)
 - [ ] Implementar Spring Security con JWT
-- [ ] Agregar Spring Boot Actuator para monitoreo
 - [ ] Configurar CI/CD con GitHub Actions
-- [ ] Desplegar en la nube (AWS/Azure/GCP)
 - [ ] Implementar rate limiting
 - [ ] Agregar métricas con Prometheus
 - [ ] Implementar cache distribuido con Redis
+- [ ] Configurar auto-scaling basado en carga
+- [ ] Implementar backup automático de base de datos
 
 ---
 
@@ -726,6 +811,6 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más det
 
 ---
 
-Hecho con ❤️ por [Juan Nieves](https://github.com/juannieves-stack)
+Hecho por [Juan Nieves](https://github.com/juannieves-stack)
 
 </div>
