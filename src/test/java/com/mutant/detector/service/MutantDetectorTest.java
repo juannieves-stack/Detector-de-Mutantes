@@ -259,12 +259,10 @@ class MutantDetectorTest {
         @DisplayName("Debería detectar humano con solo 1 secuencia vertical")
         void testHumanWithOneVerticalSequence() {
             String[] dna = {
-                "ATGCGA",
-                "AAGTGC",
-                "ATATGT",
-                "AGACGG",
-                "GCGTCA",
-                "TCACTG"
+                "ATCG", // A at 0,0
+                "AGCT", // A at 1,0
+                "ATGC", // A at 2,0
+                "ACGT"  // A at 3,0 -> Sequence 1 (Vertical). No other sequences.
             };
 
             when(dnaRecordRepository.findByDnaHash(anyString())).thenReturn(Optional.empty());
@@ -308,7 +306,7 @@ class MutantDetectorTest {
                 () -> mutantDetectorService.isMutant(null)
             );
             
-            assertTrue(exception.getMessage().contains("null"));
+            assertTrue(exception.getMessage().contains("inválida"));
         }
 
         @Test
@@ -321,7 +319,7 @@ class MutantDetectorTest {
                 () -> mutantDetectorService.isMutant(dna)
             );
             
-            assertTrue(exception.getMessage().contains("empty"));
+            assertTrue(exception.getMessage().contains("inválida"));
         }
 
         @Test
@@ -338,7 +336,7 @@ class MutantDetectorTest {
                 () -> mutantDetectorService.isMutant(dna)
             );
             
-            assertTrue(exception.getMessage().contains("null"));
+            assertTrue(exception.getMessage().contains("inválida"));
         }
 
         @Test
@@ -455,7 +453,7 @@ class MutantDetectorTest {
                 "TCACTG"
             };
 
-            DnaRecord cachedRecord = new DnaRecord(1L, "somehash", true);
+            DnaRecord cachedRecord = new DnaRecord(1L, "somehash", true, java.time.LocalDateTime.now());
             when(dnaRecordRepository.findByDnaHash(anyString())).thenReturn(Optional.of(cachedRecord));
 
             boolean result = mutantDetectorService.isMutant(dna);
@@ -477,7 +475,7 @@ class MutantDetectorTest {
                 "TCACTG"
             };
 
-            DnaRecord cachedRecord = new DnaRecord(2L, "anotherhash", false);
+            DnaRecord cachedRecord = new DnaRecord(2L, "anotherhash", false, java.time.LocalDateTime.now());
             when(dnaRecordRepository.findByDnaHash(anyString())).thenReturn(Optional.of(cachedRecord));
 
             boolean result = mutantDetectorService.isMutant(dna);

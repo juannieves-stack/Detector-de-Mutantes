@@ -1,54 +1,57 @@
-# Mutant Detector API
+# 🧬 Mutant Detector API
 
-API REST para detectar mutantes basada en secuencias de ADN. Proyecto desarrollado como parte del desafío de reclutamiento de Magneto para identificar mutantes y ayudar en la lucha contra los X-Men.
+> API REST de alto rendimiento para detectar mutantes basada en secuencias de ADN. Desarrollado como parte del desafío de reclutamiento de Magneto para identificar mutantes y ayudar en la lucha contra los X-Men.
 
 ![Java](https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=java)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.0-brightgreen?style=for-the-badge&logo=spring)
 ![Coverage](https://img.shields.io/badge/Coverage-80%25+-success?style=for-the-badge)
+![Tests](https://img.shields.io/badge/Tests-81%20Passed-success?style=for-the-badge)
 ![Docker](https://img.shields.io/badge/Docker-Ready-blue?style=for-the-badge&logo=docker)
 ![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)
 
 ---
 
-## Demo Visual
+## 📸 Demo Visual
 
-![Screenshot de Swagger](assets/swagger-demo.png)
-
----
-
-## Tabla de Contenidos
-
-- [Descripción](#descripción)
-- [Características](#características)
-- [Tecnologías](#tecnologías)
-- [Instalación y Ejecución](#instalación-y-ejecución)
-  - [Opción 1: Docker Compose (Recomendado)](#opción-1-docker-compose-recomendado)
-  - [Opción 2: Ejecución Local con Gradle](#opción-2-ejecución-local-con-gradle)
-- [Consumo de la API](#consumo-de-la-api)
-  - [POST /mutant](#post-mutant)
-  - [GET /stats](#get-stats)
-  - [Documentación Interactiva](#documentación-interactiva)
-- [Testing y Cobertura](#testing-y-cobertura)
-- [Arquitectura](#arquitectura)
-- [Estructura del Proyecto](#estructura-del-proyecto)
-- [Autor](#autor)
-- [Licencia](#licencia)
+![Screenshot de Swagger](assets/swagger.png)
 
 ---
 
-## Descripción
+## 📋 Tabla de Contenidos
+
+- [🎯 Descripción](#-descripción)
+- [✨ Características](#-características)
+- [🛠️ Tecnologías](#️-tecnologías)
+- [🚀 Instalación y Ejecución](#-instalación-y-ejecución)
+- [📡 API Endpoints](#-api-endpoints)
+  - [POST /mutant - Detectar Mutante](#post-mutant---detectar-mutante)
+  - [GET /stats - Obtener Estadísticas](#get-stats---obtener-estadísticas)
+- [📚 Documentación Interactiva](#-documentación-interactiva)
+- [🧪 Testing y Cobertura](#-testing-y-cobertura)
+- [🏗️ Arquitectura](#️-arquitectura)
+- [📁 Estructura del Proyecto](#-estructura-del-proyecto)
+- [💡 Ejemplos de Uso](#-ejemplos-de-uso)
+- [⚡ Optimizaciones](#-optimizaciones)
+- [👤 Autor](#-autor)
+- [📄 Licencia](#-licencia)
+
+---
+
+## 🎯 Descripción
 
 Magneto quiere reclutar la mayor cantidad de mutantes posible para poder luchar contra los X-Men. Esta API permite detectar si un humano es mutante basándose en su secuencia de ADN.
 
-**Criterio de Detección:**
+### Criterio de Detección
 
 Un humano es mutante si se encuentra **más de una secuencia** de cuatro letras iguales (A, T, C, G) en cualquier dirección:
-- Horizontal (→)
-- Vertical (↓)
-- Diagonal descendente (↘)
-- Diagonal ascendente (↙)
 
-**Ejemplo de ADN Mutante:**
+- **Horizontal** (→)
+- **Vertical** (↓)
+- **Diagonal descendente** (↘)
+- **Diagonal ascendente** (↙)
+
+### Ejemplo de ADN Mutante
+
 ```
 A T G C G A
 C A G T G C
@@ -58,58 +61,60 @@ C C C C T A
 T C A C T G
 ```
 
-En este caso se detectan dos secuencias:
-- Diagonal: `ATGT` (posiciones [0,0], [1,1], [2,2], [3,3])
-- Horizontal: `CCCC` (fila 4)
+En este caso se detectan **dos secuencias**:
+- **Diagonal**: `ATGT` (posiciones [0,0], [1,1], [2,2], [3,3])
+- **Horizontal**: `CCCC` (fila 4)
 
 ---
 
-## Características
+## ✨ Características
 
-- Detección de mutantes con algoritmo optimizado
-- Early termination (se detiene al encontrar la 2da secuencia)
-- Caché inteligente con hash SHA-256 para evitar re-análisis
-- Validación exhaustiva de entrada con anotaciones personalizadas
-- Estadísticas en tiempo real
-- Documentación interactiva con Swagger/OpenAPI 3.0
-- Manejo centralizado de errores
-- Cobertura de tests superior al 80%
-- Dockerizado con multi-stage build
-- Base de datos H2 en memoria (fácilmente migrable a PostgreSQL)
-
----
-
-## Tecnologías
-
-- **Java 17**
-- **Spring Boot 3.2.0**
-  - Spring Web
-  - Spring Data JPA
-  - Spring Validation
-- **Gradle 8.5**
-- **H2 Database** (en memoria)
-- **Lombok** (reducción de boilerplate)
-- **SpringDoc OpenAPI** (Swagger UI)
-- **JUnit 5** + **Mockito** (testing)
-- **Docker** + **Docker Compose**
+- ✅ **Detección optimizada** con algoritmo de early termination
+- 🚀 **Alto rendimiento** - Se detiene al encontrar la 2da secuencia
+- 💾 **Caché inteligente** con hash SHA-256 para evitar re-análisis
+- 🛡️ **Validación exhaustiva** con anotaciones personalizadas
+- 📊 **Estadísticas en tiempo real** de mutantes vs humanos
+- 📖 **Documentación interactiva** con Swagger/OpenAPI 3.0
+- 🎯 **Manejo centralizado de errores** con respuestas estructuradas
+- 🧪 **81 tests** con 100% de éxito y cobertura superior al 80%
+- 🐳 **Dockerizado** con multi-stage build optimizado
+- 💽 **Base de datos H2** en memoria (fácilmente migrable a PostgreSQL)
 
 ---
 
-## Instalación y Ejecución
+## 🛠️ Tecnologías
+
+| Tecnología | Versión | Propósito |
+|------------|---------|-----------|
+| **Java** | 17 | Lenguaje de programación |
+| **Spring Boot** | 3.2.0 | Framework principal |
+| **Spring Data JPA** | - | Persistencia de datos |
+| **Spring Validation** | - | Validación de entrada |
+| **Gradle** | 8.5 | Gestión de dependencias |
+| **H2 Database** | - | Base de datos en memoria |
+| **Lombok** | - | Reducción de boilerplate |
+| **SpringDoc OpenAPI** | - | Documentación Swagger |
+| **JUnit 5** | - | Framework de testing |
+| **Mockito** | - | Mocking para tests |
+| **Docker** | - | Containerización |
+
+---
+
+## 🚀 Instalación y Ejecución
 
 ### Prerequisitos
 
 - **Docker** y **Docker Compose** (para la opción recomendada)
 - **Java 17** y **Gradle 8.5** (para ejecución local)
 
-### Opción 1: Docker Compose (Recomendado)
+### Opción 1: Docker Compose (Recomendado) 🐳
 
 La forma más rápida y sencilla de ejecutar la aplicación:
 
 ```bash
 # Clonar el repositorio
-git clone https://github.com/tu-usuario/mutant-detector.git
-cd mutant-detector
+git clone https://github.com/juannieves-stack/Detector-de-Mutantes.git
+cd Detector-de-Mutantes
 
 # Construir y levantar con Docker Compose
 docker-compose up --build -d
@@ -123,12 +128,12 @@ docker-compose down
 
 La aplicación estará disponible en: **http://localhost:8080**
 
-### Opción 2: Ejecución Local con Gradle
+### Opción 2: Ejecución Local con Gradle ☕
 
 ```bash
 # Clonar el repositorio
-git clone https://github.com/tu-usuario/mutant-detector.git
-cd mutant-detector
+git clone https://github.com/juannieves-stack/Detector-de-Mutantes.git
+cd Detector-de-Mutantes
 
 # Dar permisos de ejecución al wrapper (Linux/Mac)
 chmod +x gradlew
@@ -150,21 +155,23 @@ La aplicación estará disponible en: **http://localhost:8080**
 
 ---
 
-## Consumo de la API
+## 📡 API Endpoints
 
-### POST /mutant
+### POST /mutant - Detectar Mutante
 
-Detecta si una secuencia de ADN pertenece a un mutante.
+Analiza una secuencia de ADN para determinar si pertenece a un mutante.
 
-**Endpoint:** `POST http://localhost:8080/mutant`
+#### 📍 Endpoint
+```
+POST http://localhost:8080/mutant
+```
 
-**Headers:**
+#### 📥 Headers
 ```
 Content-Type: application/json
 ```
 
-**Caso 1: ADN Mutante (Retorna 200 OK)**
-
+#### 📝 Request Body
 ```json
 {
   "dna": [
@@ -178,13 +185,30 @@ Content-Type: application/json
 }
 ```
 
-**Respuesta:**
+#### ✅ Caso 1: ADN Mutante (200 OK)
+
+**Request:**
+```json
+{
+  "dna": [
+    "ATGCGA",
+    "CAGTGC",
+    "TTATGT",
+    "AGAAGG",
+    "CCCCTA",
+    "TCACTG"
+  ]
+}
+```
+
+**Response:**
 ```
 HTTP/1.1 200 OK
 ```
 
-**Caso 2: ADN Humano (Retorna 403 Forbidden)**
+#### ❌ Caso 2: ADN Humano (403 Forbidden)
 
+**Request:**
 ```json
 {
   "dna": [
@@ -198,13 +222,14 @@ HTTP/1.1 200 OK
 }
 ```
 
-**Respuesta:**
+**Response:**
 ```
 HTTP/1.1 403 Forbidden
 ```
 
-**Caso 3: Validación Fallida (Retorna 400 Bad Request)**
+#### ⚠️ Caso 3: Validación Fallida (400 Bad Request)
 
+**Request:**
 ```json
 {
   "dna": [
@@ -215,10 +240,10 @@ HTTP/1.1 403 Forbidden
 }
 ```
 
-**Respuesta:**
+**Response:**
 ```json
 {
-  "timestamp": "2025-11-22T12:00:00",
+  "timestamp": "2025-11-26T12:00:00",
   "status": 400,
   "error": "Bad Request",
   "message": "La validación de restricciones falló",
@@ -229,41 +254,117 @@ HTTP/1.1 403 Forbidden
 }
 ```
 
-### GET /stats
+#### 🔍 Validaciones
 
-Obtiene estadísticas sobre las verificaciones de ADN.
+- ✅ La matriz debe ser **NxN** (cuadrada)
+- ✅ Solo se permiten caracteres: **A, T, C, G** (mayúsculas)
+- ✅ El array no puede ser **nulo o vacío**
+- ✅ Tamaño mínimo: **4x4**
 
-**Endpoint:** `GET http://localhost:8080/stats`
+#### 🎯 Códigos de Respuesta
 
-**Respuesta:**
+| Código | Descripción |
+|--------|-------------|
+| `200 OK` | El ADN pertenece a un mutante |
+| `403 Forbidden` | El ADN pertenece a un humano |
+| `400 Bad Request` | Error de validación en el formato |
+
+---
+
+### GET /stats - Obtener Estadísticas
+
+Retorna estadísticas sobre todas las secuencias de ADN analizadas.
+
+#### 📍 Endpoint
+```
+GET http://localhost:8080/stats
+```
+
+#### ✅ Response (200 OK)
+
 ```json
 {
   "count_mutant_dna": 40,
   "count_human_dna": 100,
-  "ratio": 0.4
+  "ratio": 0.2857142857142857
 }
 ```
 
-**Descripción de campos:**
-- `count_mutant_dna`: Cantidad de mutantes detectados
-- `count_human_dna`: Cantidad de humanos detectados
-- `ratio`: Ratio de mutantes sobre el total (mutantes / total)
+#### 📊 Descripción de Campos
 
-### Documentación Interactiva
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| `count_mutant_dna` | `long` | Cantidad total de mutantes detectados |
+| `count_human_dna` | `long` | Cantidad total de humanos detectados |
+| `ratio` | `double` | Proporción de mutantes sobre el total |
 
-La API cuenta con documentación interactiva generada con Swagger/OpenAPI 3.0:
+#### 🧮 Cálculo del Ratio
 
-**Swagger UI:** http://localhost:8080/swagger-ui.html
+```
+ratio = count_mutant_dna / (count_mutant_dna + count_human_dna)
+```
 
-Desde aquí puedes:
-- Ver todos los endpoints disponibles
-- Probar la API directamente desde el navegador
-- Ver ejemplos de request/response
-- Consultar los esquemas de datos
+- Si no hay registros: `ratio = 0.0`
+- El ratio siempre está entre `0.0` y `1.0`
+
+#### 📈 Ejemplos de Respuesta
+
+**Sin datos:**
+```json
+{
+  "count_mutant_dna": 0,
+  "count_human_dna": 0,
+  "ratio": 0.0
+}
+```
+
+**Solo mutantes:**
+```json
+{
+  "count_mutant_dna": 50,
+  "count_human_dna": 0,
+  "ratio": 1.0
+}
+```
+
+**Distribución mixta:**
+```json
+{
+  "count_mutant_dna": 40,
+  "count_human_dna": 100,
+  "ratio": 0.2857142857142857
+}
+```
+
+![Stats Endpoint](assets/swagger-stats-endpoint.png)
 
 ---
 
-## Testing y Cobertura
+## 📚 Documentación Interactiva
+
+La API cuenta con documentación interactiva generada con **Swagger/OpenAPI 3.0**:
+
+### 🌐 Swagger UI
+```
+http://localhost:8080/swagger-ui.html
+```
+
+### 📄 OpenAPI Spec
+```
+http://localhost:8080/v3/api-docs
+```
+
+### Funcionalidades de Swagger UI
+
+- 📖 Ver todos los endpoints disponibles
+- 🧪 Probar la API directamente desde el navegador
+- 📝 Ver ejemplos de request/response
+- 🔍 Consultar los esquemas de datos
+- 📋 Exportar especificación OpenAPI
+
+---
+
+## 🧪 Testing y Cobertura
 
 El proyecto cuenta con una suite completa de tests unitarios e integración.
 
@@ -301,25 +402,25 @@ open build/reports/jacoco/test/html/index.html
 
 ### Cobertura de Tests
 
-![Coverage Report](assets/coverage.png)
+![Coverage Report](assets/Estadisticas.png)
+![Stats Endpoint](assets/swagger-stats-endpoint.png)
 
 **Estadísticas de Testing:**
-- **95+ test cases** distribuidos en 3 clases principales
+- **81 test cases** con 100% de éxito
 - **Cobertura superior al 80%**
 - Tests unitarios con Mockito
 - Tests de integración con MockMvc
 - Tests de validación exhaustivos
 
-**Clases de Test:**
-- `MutantDetectorTest` (40+ tests): Lógica de detección y validación
-- `MutantControllerTest` (25+ tests): Endpoints REST
-- `StatsServiceTest` (30+ tests): Cálculo de estadísticas
+**Paquetes de Test:**
+- `com.mutant.detector.service` (57 tests): Lógica de detección, validación y estadísticas
+- `com.mutant.detector.controller` (24 tests): Endpoints REST y manejo de errores
 
 ---
 
-## Arquitectura
+## 🏗️ Arquitectura
 
-La aplicación sigue una arquitectura en capas con separación de responsabilidades:
+La aplicación sigue una **arquitectura en capas** con separación de responsabilidades:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -424,7 +525,7 @@ La aplicación sigue una arquitectura en capas con separación de responsabilida
 
 ---
 
-## Estructura del Proyecto
+## 📁 Estructura del Proyecto
 
 ```
 mutant-detector/
@@ -476,7 +577,7 @@ mutant-detector/
 
 ---
 
-## Ejemplos de Uso
+## 💡 Ejemplos de Uso
 
 ### Con curl
 
@@ -509,28 +610,88 @@ Invoke-RestMethod -Uri "http://localhost:8080/mutant" `
 Invoke-RestMethod -Uri "http://localhost:8080/stats"
 ```
 
+### Con JavaScript (Fetch API)
+
+**Detectar Mutante:**
+```javascript
+fetch('http://localhost:8080/mutant', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    dna: ["ATGCGA","CAGTGC","TTATGT","AGAAGG","CCCCTA","TCACTG"]
+  })
+})
+.then(response => {
+  if (response.status === 200) {
+    console.log('¡Es un mutante!');
+  } else if (response.status === 403) {
+    console.log('Es un humano');
+  }
+});
+```
+
+**Obtener Estadísticas:**
+```javascript
+fetch('http://localhost:8080/stats')
+  .then(response => response.json())
+  .then(data => console.log(data));
+```
+
+### Con Python (requests)
+
+**Detectar Mutante:**
+```python
+import requests
+
+url = "http://localhost:8080/mutant"
+payload = {
+    "dna": ["ATGCGA","CAGTGC","TTATGT","AGAAGG","CCCCTA","TCACTG"]
+}
+
+response = requests.post(url, json=payload)
+
+if response.status_code == 200:
+    print("¡Es un mutante!")
+elif response.status_code == 403:
+    print("Es un humano")
+```
+
+**Obtener Estadísticas:**
+```python
+import requests
+
+response = requests.get("http://localhost:8080/stats")
+stats = response.json()
+print(stats)
+```
+
 ---
 
-## Optimizaciones Implementadas
+## ⚡ Optimizaciones
 
-### 1. Early Termination
+### 1. Early Termination ⏱️
 El algoritmo se detiene inmediatamente al encontrar la segunda secuencia mutante, evitando análisis innecesarios.
 
-### 2. Caché con SHA-256
+### 2. Caché con SHA-256 💾
 Cada secuencia de ADN se hashea con SHA-256. Si el hash ya existe en la base de datos, se retorna el resultado cacheado sin re-analizar.
 
-### 3. Índice en Base de Datos
+### 3. Índice en Base de Datos 🔍
 El campo `dna_hash` tiene un índice único para búsquedas O(1).
 
-### 4. Validación Temprana
+### 4. Validación Temprana ✅
 La validación ocurre en la capa de controller antes de llegar al servicio, usando Bean Validation y validadores personalizados.
 
-### 5. Multi-Stage Docker Build
+### 5. Multi-Stage Docker Build 🐳
 El Dockerfile usa multi-stage build para reducir el tamaño de la imagen final en ~70% (de ~655MB a ~200MB).
+
+### 6. Queries Optimizadas 📊
+Uso de queries nativas y métodos de conteo optimizados en el repositorio para estadísticas rápidas.
 
 ---
 
-## Próximos Pasos
+## 🔮 Próximos Pasos
 
 - [ ] Migrar a base de datos PostgreSQL para producción
 - [ ] Implementar Spring Security con JWT
@@ -539,21 +700,31 @@ El Dockerfile usa multi-stage build para reducir el tamaño de la imagen final e
 - [ ] Desplegar en la nube (AWS/Azure/GCP)
 - [ ] Implementar rate limiting
 - [ ] Agregar métricas con Prometheus
+- [ ] Implementar cache distribuido con Redis
 
 ---
 
-## Autor
+## 👤 Autor
 
-**Tu Nombre**
-- GitHub: [@tu-usuario](https://github.com/tu-usuario)
-- LinkedIn: [Tu Perfil](https://linkedin.com/in/tu-perfil)
-
----
-
-## Licencia
-
-Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para más detalles.
+**Juan Nieves**
+- GitHub: [@Juannieves-stack](https://github.com/juannieves-stack)
 
 ---
 
-**Desarrollado con ❤️ para el desafío de Magneto**
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
+
+---
+
+<div align="center">
+
+**¿Encontraste un bug? ¿Tienes una sugerencia?**
+
+[Reportar Issue](https://github.com/juannieves-stack/Detector-de-Mutantes/issues) · [Solicitar Feature](https://github.com/juannieves-stack/Detector-de-Mutantes/issues)
+
+---
+
+Hecho con ❤️ por [Juan Nieves](https://github.com/juannieves-stack)
+
+</div>

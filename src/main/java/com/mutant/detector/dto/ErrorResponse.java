@@ -41,7 +41,7 @@ public class ErrorResponse {
 
     @Schema(
         description = "Mensaje de error principal",
-        example = "Invalid DNA sequence"
+        example = "Secuencia de ADN inválida"
     )
     private String message;
 
@@ -53,7 +53,7 @@ public class ErrorResponse {
 
     @Schema(
         description = "Detalles adicionales del error (opcional)",
-        example = "{\"dna\": \"DNA array cannot be empty\"}"
+        example = "{\"dna\": \"El array de ADN no puede estar vacío\"}"
     )
     private Map<String, String> details;
 

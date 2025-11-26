@@ -217,21 +217,23 @@ class MutantControllerTest {
         @DisplayName("Debería retornar 400 para formato de ADN inválido (no cuadrado)")
         void testNonSquareMatrix() throws Exception {
             String[] dna = {
-                "ATGCGA",
-                "CAGTGC",
-                "TTAT"  // Wrong length
+                "AAAA",
+                "CCCC",
+                "TTAT",
+                "AGA"  // Wrong length (3 instead of 4)
             };
             DnaRequest request = new DnaRequest(dna);
 
             when(mutantDetectorService.isMutant(any(String[].class)))
-                    .thenThrow(new InvalidDnaException("DNA must be NxN matrix"));
+                    .thenThrow(new InvalidDnaException("Secuencia de ADN inválida: debe ser una matriz cuadrada NxN"));
 
             mockMvc.perform(post("/mutant")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.error").exists())
-                    .andExpect(jsonPath("$.error", containsString("NxN")));
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.details").exists())
+                    .andExpect(jsonPath("$.details").value(org.hamcrest.Matchers.hasValue(containsString("NxN"))));
         }
 
         @Test
@@ -248,7 +250,7 @@ class MutantControllerTest {
             DnaRequest request = new DnaRequest(dna);
 
             when(mutantDetectorService.isMutant(any(String[].class)))
-                    .thenThrow(new InvalidDnaException("Invalid DNA base 'X'"));
+                    .thenThrow(new InvalidDnaException("Secuencia de ADN inválida: carácter 'X' no permitido"));
 
             mockMvc.perform(post("/mutant")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -290,7 +292,7 @@ class MutantControllerTest {
             DnaRequest request = new DnaRequest(dna);
 
             when(mutantDetectorService.isMutant(any(String[].class)))
-                    .thenThrow(new InvalidDnaException("DNA sequence at index 1 is null"));
+                    .thenThrow(new InvalidDnaException("Secuencia de ADN inválida: elemento nulo en índice 1"));
 
             mockMvc.perform(post("/mutant")
                     .contentType(MediaType.APPLICATION_JSON)
